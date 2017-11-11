@@ -1,0 +1,102 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
+        integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+        <style type="text/css">
+            p {font-size: 16px;}
+
+            .thumbnail iframe {
+                width: 1440px;
+                height: 900px;
+            }
+
+            .thumbnail {
+                position: relative;
+                -ms-zoom: 0.25;
+                -moz-transform: scale(0.25);
+                -moz-transform-origin: 0 0;
+                -o-transform: scale(0.25);
+                -o-transform-origin: 0 0;
+                -webkit-transform: scale(0.25);
+                -webkit-transform-origin: 0 0;
+            }
+
+            .thumbnail:after {
+                content: "";
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+            }
+
+        </style>
+
+        <title>Exploring semantic spaces</title>
+    </head>
+
+    <body>
+    <nav class="navbar navbar-inverse">
+    <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Explore meaning in space!</a>
+        </div>
+    </div>
+    </nav>
+
+    <div class="container">
+
+        <div  class="row">
+            <div class="col-md-3">
+            <br><br>
+            <p> Hey there! You have come to our prototype for visualising areas of so-called <a href="http://aurelieherbelot.net/research/distributional-semantics-intro/">semantic spaces</a>.
+            It shows you what a computer who's read Wikipedia in a particular language can learn about the meaning of words in that language.</p>
+            <p>Currently, the demo is in Catalan. You can type a word (e.g. <i>casa</i>, house) and see which other words are related to it.</p>
+
+            <form class="form-inline" action="." method="POST"  accept-charset="UTF-8">
+                <!-- <div class="form-group">
+                    <label for="instruction" class="sr-only">Email</label>
+                    <input type="text" readonly class=".form-control-plaintext" id="instruction" value="Enter a word">
+                </div> -->
+                <div class="form-group mx-sm-3">
+                    <label for="target_word" class="sr-only">Target word</label>
+                    <input type="text" class="form-control" id="target_word" name="target_word" placeholder="enter a word, e.g. casa">
+                </div>
+                <button type="submit" class="btn btn-primary">Go</button>
+            </form>
+
+            <br>
+            <p>{{ error|safe }}</p>
+            </div>
+            <div class="col-md-3">
+            <img src="data:image/png;base64,{{ target }}"/>
+            </div>
+        </div>
+
+        <div class="row">
+            <hr>
+            <p><b>The 50 most related words: </b>{{ neighbours|safe }}</p>
+        </div>
+    <!--
+    <div class="thumbnail-container">
+        <div class="thumbnail">
+            <iframe src="https://ca.wikipedia.org/wiki/Terminologia" frameborder="0"></iframe>
+        </div>
+    </div>
+    -->
+
+    </div><!-- /.container -->
+    </body>
+</html>
