@@ -38,7 +38,7 @@
 
         </style>
 
-        <title>Exploring semantic spaces</title>
+        <title>Recording the World Wide Web</title>
     </head>
 
     <body>
@@ -61,11 +61,8 @@
         <div  class="row">
             <div class="col-md-3">
             <br><br>
-            <p> Hey there! You have come to our prototype for visualising areas of <a href="http://aurelieherbelot.net/research/distributional-semantics-intro/">semantic spaces</a>.
-            It shows you what a computer who's read Wikipedia in a particular language can learn about the meaning of words.</p>
-            <p>Currently, we have a small demo in <b>English</b> and <b>Catalan</b>. To use it, select your language, and type a word in that language to see which other words are related to it. The system knows 20,000
-            words in each language, so you'll get an error if you type a word it doesn't know (Catalan users: accents matter!)</p>
-            <p>Under the graph, you will find more related words, linked to their Wiktionary definitions.</p>
+            <p> So you want to record the Web?</p>
+            <p>Currently, we have a small demo in <b>English</b> and <b>Catalan</b>. To use it, select your language, and copy/paste a url for a web page in your language.</p>
 
             <form class="form-inline" action="." method="POST"  accept-charset="UTF-8">
                 <select class="custom-select" id="language" name="language">
@@ -75,23 +72,26 @@
 
                 <div class="form-group mx-sm-3">
                     <label for="target_word" class="sr-only">Target word</label>
-                    <input type="text" class="form-control" id="target_word" name="target_word" placeholder="enter a word">
+                    <input type="text" class="form-control" id="target_url" name="target_url" placeholder="enter a URL">
                 </div>
                 <button type="submit" class="btn btn-primary">Go</button>
             </form>
 
             <br>
-            <p>{{ error|safe }}</p>
             </div>
-            <div class="col-md-3">
-            <img src="data:image/png;base64,{{ target }}"/>
+            <div class="col-md-9">
+            <br><br>
+            <!--<p><b>The 50 most related urls: </b>{{ neighbours|safe }}</p>-->
+            {% for neighbour in neighbours %}
+                <h3><a href="{{neighbour[0]}}">{{neighbour[1]}}</a></h3>
+                {{neighbour[2]}} ... <br>
+                <a href="{{neighbour[0]}}">{{neighbour[0]}}</a>
+                <hr/>
+            {% endfor %}
+
             </div>
         </div>
 
-        <div class="row">
-            <hr>
-            <p><b>The 50 most related words: </b>{{ neighbours|safe }}</p>
-        </div>
     </div><!-- /.container -->
     </body>
 </html>

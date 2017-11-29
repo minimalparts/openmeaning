@@ -1,8 +1,7 @@
 from math import sqrt
 import numpy as np
-from models import Catalan
+from models import Catalan, Url
 from matplotlib import cm
-from sklearn.decomposition import PCA
 import pandas as pd
 import logging
 
@@ -21,9 +20,27 @@ def readDM(dm_file):
         dm_dict[row]=vec
     return dm_dict
 
-def convert_to_array(vec):
-    '''For DB version'''
-    return np.array([float(i) for i in vec.split(',')])
+def readUrls(url_file):
+    urls = {}
+    f = open(url_file,'r')
+    for l in f:
+        l=l.rstrip('\n').split(',')
+        if len(l) == 6:
+            u = Url(id=l[0],url=l[1],title=l[2],freqs=l[3],vector=convert_to_array(l[4]),snippet=l[5])
+            urls[u.url]=u
+    f.close()
+    return urls
+
+def normalise(v):
+    norm = np.linalg.norm(v)
+    if norm == 0:
+        return v
+    return v / norm
+
+
+def convert_to_array(vector):
+      return np.array([float(i) for i in vector.split(' ')])
+
 
 def get_db_vector(word):
     '''For DB version.'''
@@ -41,13 +58,13 @@ def cosine_similarity(v1, v2):
 def sim_to_matrix(dm_dict,vec,n):
     cosines={}
     c=0
-    #for entry in Catalan.query.all():
     for k,v in dm_dict.items():
-        #cos = cosine_similarity(np.array(vec), convert_to_array(entry.vector))
-        #cosines[entry.word]=cos
-        cos = cosine_similarity(dm_dict[vec], v)
-        cosines[k]=cos
-        c+=1
+        try:
+            cos = cosine_similarity(vec, v)
+            cosines[k]=cos
+            c+=1
+        except:
+            pass
     c=0
     neighbours = []
     for t in sorted(cosines, key=cosines.get, reverse=True):
@@ -56,6 +73,27 @@ def sim_to_matrix(dm_dict,vec,n):
                 print(t,cosines[t])
                 neighbours.append(t)
                 c+=1
+        else:
+            break
+    return neighbours
+
+def sim_to_matrix_url(url_dict,vec,n):
+    cosines={}
+    for k,v in url_dict.items():
+        logging.exception(v.url)
+        try:
+            cos = cosine_similarity(vec, v.vector)
+            cosines[k]=cos
+        except:
+            pass
+    c=0
+    neighbours = []
+    for t in sorted(cosines, key=cosines.get, reverse=True):
+        if c<n:
+            #print(t,cosines[t])
+            neighbour = [t,url_dict[t].title,url_dict[t].snippet]
+            neighbours.append(neighbour)
+            c+=1
         else:
             break
     return neighbours
